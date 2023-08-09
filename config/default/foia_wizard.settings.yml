@@ -147,7 +147,7 @@ messages:
     value: "<p><a href=\"https://www.ssa.gov/forms/ssa-7050.pdf\">To find your earnings records, please complete Form SSA-7050-F4 and mail it to the address on the form along with the applicable fee and other required documents.</a></p>\r\n\r\n<p><a href=\"https://www.foia.gov/agency-search.html?id=076ddcc4-113d-47bf-b00f-0962512a7770&amp;type=component\">You can also submit a FOIA request to the Social Security Administration</a></p>\r\n"
     format: rich_text
   m48:
-    value: "<p>Message 48</p>\r\n"
+    value: "<p>These records appear to be records of a state or local authority.&nbsp; If you are looking for non-federal records, such as state or local records, we suggest that you contact the proper state or local authority in accordance with the appropriate state or local records access law.</p>\r\n"
     format: rich_text
   m49:
     value: "<p>Message 49</p>\r\n"
