@@ -150,7 +150,7 @@ messages:
     value: "<p><a href=\"/agency-search.html?id=076ddcc4-113d-47bf-b00f-0962512a7770&amp;type=component\">Submit a FOIA request to the Social Security Administration.</a></p>\r\n"
     format: rich_text
   m49:
-    value: "<p>Message 49</p>\r\n"
+    value: "<p>These records appear to be records of a state or local authority.&nbsp; If you are looking for non-federal records, such as state or local records, we suggest that you contact the proper state or local authority in accordance with the appropriate state or local records access law.</p>\r\n"
     format: rich_text
   m50:
     value: "<p>Message 50</p>\r\n"
