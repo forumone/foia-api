@@ -45,6 +45,7 @@
         "drupal/jquery_ui": "^1.4",
         "drupal/jquery_ui_accordion": "^1.1",
         "drupal/jsonapi_extras": "^3.20.0",
+        "drupal/jsonapi_search_api": "^1.0@RC",
         "drupal/lightning_api": "^4.8",
         "drupal/lightning_core": "^5.11.0",
         "drupal/lightning_layout": "^2.12.0",

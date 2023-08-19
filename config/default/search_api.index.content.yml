@@ -3,10 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.field_agency_comp_abbreviation
+    - field.storage.taxonomy_term.field_agency_abbreviation
     - search_api.server.database
     - core.entity_view_mode.node.full
   module:
     - node
+    - taxonomy
     - search_api
 _core:
   default_config_hash: 5oGmbthAOm65ilSVAb2fnEb6u3IBMfKIw3sPA8KuqXU
@@ -15,6 +18,30 @@ name: Content
 description: 'An index of all content in your site.'
 read_only: false
 field_settings:
+  description:
+    label: Description
+    datasource_id: 'entity:taxonomy_term'
+    property_path: description
+    type: text
+    dependencies:
+      module:
+        - taxonomy
+  field_agency_abbreviation:
+    label: Abbreviation
+    datasource_id: 'entity:taxonomy_term'
+    property_path: field_agency_abbreviation
+    type: string
+    dependencies:
+      config:
+        - field.storage.taxonomy_term.field_agency_abbreviation
+  field_agency_comp_abbreviation:
+    label: Abbreviation
+    datasource_id: 'entity:node'
+    property_path: field_agency_comp_abbreviation
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_agency_comp_abbreviation
   label:
     label: Label
     property_path: aggregated_field
@@ -36,7 +63,7 @@ field_settings:
     type: text
     configuration:
       roles:
-        anonymous: anonymous
+        - anonymous
       view_mode:
         'entity:node':
           agency_component: default
@@ -48,7 +75,7 @@ field_settings:
           page: default
           quarterly_foia_report_data: default
   status:
-    label: null
+    label: status
     datasource_id: 'entity:node'
     property_path: status
     type: boolean
@@ -57,8 +84,32 @@ field_settings:
     dependencies:
       module:
         - node
+  taxonomy_status:
+    label: Published
+    datasource_id: 'entity:taxonomy_term'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - taxonomy
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+    dependencies:
+      module:
+        - node
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
   uid:
-    label: null
+    label: uid
     datasource_id: 'entity:node'
     property_path: uid
     type: integer
@@ -67,8 +118,23 @@ field_settings:
     dependencies:
       module:
         - node
+  vid:
+    label: Vocabulary
+    datasource_id: 'entity:taxonomy_term'
+    property_path: vid
+    type: string
+    dependencies:
+      module:
+        - taxonomy
 datasource_settings:
   'entity:node':
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
+  'entity:taxonomy_term':
     bundles:
       default: true
       selected: {  }
@@ -81,6 +147,7 @@ processor_settings:
   content_access:
     weights:
       preprocess_query: -10
+  entity_type: {  }
   html_filter:
     weights:
       preprocess_index: -10
@@ -177,4 +244,5 @@ tracker_settings:
 options:
   cron_limit: 50
   index_directly: true
+  track_changes_in_references: false
 server: database

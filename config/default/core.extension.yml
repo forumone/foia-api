@@ -73,6 +73,8 @@ module:
   jsonapi: 0
   jsonapi_defaults: 0
   jsonapi_extras: 0
+  jsonapi_resources: 0
+  jsonapi_search_api: 0
   layout_builder: 0
   layout_builder_restrictions: 0
   layout_builder_styles: 0
