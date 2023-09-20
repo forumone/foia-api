@@ -125,6 +125,11 @@
     "skip": "m41"
   },
   {
+    "trigger": "Veteran Benefits",
+    "caseSensitive": false,
+    "skip": "m41"
+  },
+  {
     "trigger": "Background investigation",
     "caseSensitive": false,
     "skip": "m34"
