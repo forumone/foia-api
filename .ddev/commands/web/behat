@@ -1,0 +1,7 @@
+#!/bin/sh
+
+## Description: Run behat tests
+## Usage: behat
+## Example: "ddev behat"
+
+vendor/bin/behat --config=tests/behat/behat.yml
