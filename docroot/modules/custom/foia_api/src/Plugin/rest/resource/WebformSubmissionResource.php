@@ -10,8 +10,8 @@ use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\file_entity\Entity\FileEntity;
 use Drupal\foia_webform\AgencyLookupServiceInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ModifiedResourceResponse;
+use Drupal\rest\Plugin\ResourceBase;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Plugin\WebformElementManagerInterface;
 use Drupal\webform\WebformInterface;
@@ -128,6 +128,13 @@ class WebformSubmissionResource extends ResourceBase {
       $this->logSubmission($statusCode, $message);
       return new ModifiedResourceResponse(['errors' => $message], $statusCode);
     }
+    $websiteRequest = isset($_SERVER["HTTP_X_API_USER_ID"]) && $_SERVER["HTTP_X_API_USER_ID"] === \Drupal::config('foia.secrets')->get('api_user_id');
+    if (!$websiteRequest) {
+      $statusCode = 400;
+      $message = t("To submit FOIA requests using FOIA.gov, you must use the request forms on the site.");
+      $this->logSubmission($statusCode, "api_submission: $message");
+      return new ModifiedResourceResponse(['errors' => $message], $statusCode);
+    }
 
     $webformId = $data['id'] ?? '';
     if (!$webformId) {
@@ -191,7 +198,8 @@ class WebformSubmissionResource extends ResourceBase {
       $phoneNumber = isset($data['phone_number']) && $data['phone_number'];
       $mailingAddress = isset($data['address_line1']) && $data['address_line1']
       && isset($data['address_city']) && $data['address_city']
-      && isset($data['address_state_province']) && $data['address_state_province']
+      && ((isset($data['address_state_province']) && $data['address_state_province'])
+          || (isset($data['address_state_province_international']) && $data['address_state_province_international']))
       && isset($data['address_zip_postal_code']) && $data['address_zip_postal_code']
       && isset($data['address_country']) && $data['address_country'];
 
@@ -455,13 +463,13 @@ class WebformSubmissionResource extends ResourceBase {
       if (isset($element['#max_filesize'])) {
         $maxFileSize = $element['#max_filesize'];
         if (!empty($maxFileSize)) {
-          $maxFileSize = Bytes::toInt("{$maxFileSize}MB");
+          $maxFileSize = Bytes::toNumber("{$maxFileSize}MB");
         }
       }
       if (empty($maxFileSize)) {
         $maxFileSize = \Drupal::config('webform.settings')->get('file.default_max_filesize');
         if (!empty($maxFileSize)) {
-          $maxFileSize = Bytes::toInt($maxFileSize);
+          $maxFileSize = Bytes::toNumber($maxFileSize);
         }
       }
       if (empty($maxFileSize)) {
@@ -540,7 +548,7 @@ class WebformSubmissionResource extends ResourceBase {
     if ($readable) {
       return $maxUploadSize;
     }
-    return Bytes::toInt("{$maxUploadSize}MB");
+    return Bytes::toNumber("{$maxUploadSize}MB");
   }
 
   /**

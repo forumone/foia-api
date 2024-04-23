@@ -7,14 +7,14 @@ namespace Drupal\foia_quarterly_data_report\Plugin\Action;
  * Contains \Drupal\foia_quarterly_data_report\Plugin\Action\QuarterlyReportModerationAction.
  */
 
-use Drupal\Core\Action\ActionBase;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\content_moderation\StateTransitionValidationInterface;
+use Drupal\Core\Action\ActionBase;
+use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * VBO Moderation state change.
@@ -192,8 +192,9 @@ class QuarterlyReportModerationAction extends ActionBase implements ContainerFac
       $entity->set('moderation_state', $state);
 
       if (method_exists($entity, 'setRevisionUserId')) {
-        $entity->setRevisionCreationTime(REQUEST_TIME);
-        $entity->setRevisionLogMessage('VBO Published quarterly report, time:' . date('d/m/Y - h:i', REQUEST_TIME));
+        $request_time = \Drupal::time()->getRequestTime();
+        $entity->setRevisionCreationTime($request_time);
+        $entity->setRevisionLogMessage('VBO Published quarterly report, time:' . date('d/m/Y - h:i', $request_time));
         $entity->setRevisionUserId(\Drupal::service('current_user')->id());
       }
       if ($entity->save()) {

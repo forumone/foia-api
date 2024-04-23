@@ -2,8 +2,8 @@
 
 namespace Drupal\foia_file\Commands;
 
-use Drush\Commands\DrushCommands;
 use Drupal\file\Entity\File;
+use Drush\Commands\DrushCommands;
 
 /**
  * A Drush commandfile.
@@ -94,6 +94,7 @@ class FoiaFileCommands extends DrushCommands {
 
       // Determine file entity id based upon file path & name.
       $query = \Drupal::entityQuery('file')
+        ->accessCheck(TRUE)
         ->condition('uri', "private://webform/{$relativeFileName}");
       $fids = $query->execute();
       if ($fids) {

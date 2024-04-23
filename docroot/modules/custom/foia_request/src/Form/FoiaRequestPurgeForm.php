@@ -4,8 +4,8 @@ namespace Drupal\foia_request\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\foia_request\Entity\FoiaRequestInterface;
 use Drupal\foia_request\Entity\FoiaRequest;
+use Drupal\foia_request\Entity\FoiaRequestInterface;
 
 /**
  * Purge failed FOIA requests older than 2 weeks.
@@ -40,6 +40,7 @@ class FoiaRequestPurgeForm extends FormBase {
   private function queryRequests() {
     $cutoff_date = strtotime('-2 weeks');
     return \Drupal::entityQuery('foia_request')
+      ->accessCheck(FALSE)
       ->condition('request_status', FoiaRequestInterface::STATUS_FAILED)
       ->condition('created', $cutoff_date, '<')
       ->execute();
