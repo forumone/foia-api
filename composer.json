@@ -114,6 +114,7 @@
         "npm-asset/jquery-validation": "^1.19.5",
         "npm-asset/select2": "^4.0",
         "oomphinc/composer-installers-extender": "^2",
+        "platformsh/config-reader": "^2.4",
         "symfony/routing": "^6.3",
         "twig/twig": "^3.6"
     },
