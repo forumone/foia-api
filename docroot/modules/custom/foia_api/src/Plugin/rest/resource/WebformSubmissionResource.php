@@ -129,9 +129,10 @@ class WebformSubmissionResource extends ResourceBase {
       return new ModifiedResourceResponse(['errors' => $message], $statusCode);
     }
 
+    // If the site has API User ID configured, require clients to provide it.
     $api_user_id = \Drupal::config('foia.secrets')->get('api_user_id');
-    $websiteRequest = !$api_user_id || (isset($_SERVER["HTTP_X_API_USER_ID"]) && $_SERVER["HTTP_X_API_USER_ID"] === $api_user_id);
-    if (!$websiteRequest) {
+    $given_user_id_header = $_SERVER["HTTP_X_API_USER_ID"] ?? '';
+    if ($api_user_id && $given_user_id_header !== $api_user_id) {
       $statusCode = 400;
       $message = t("To submit FOIA requests using FOIA.gov, you must use the request forms on the site.");
       $this->logSubmission($statusCode, "api_submission: $message");
@@ -211,6 +212,21 @@ class WebformSubmissionResource extends ResourceBase {
           'email' => $message,
           'phone_number' => $message,
           'address_line1' => $message,
+        ];
+      }
+    }
+    if ($webformId == 'wizard_feedback' && empty($errors)) {
+      // Must include a response to either of the three items.
+      $relevance = isset($data['results_relevant_to_search']['How relevant were the results to your search?'])
+        && $data['results_relevant_to_search']['How relevant were the results to your search?'];
+      $expectations = isset($data['results_meet_expectations']['How well do these results meet your expectations?'])
+        && $data['results_meet_expectations']['How well do these results meet your expectations?'];
+      $other_feedback = isset($data['other_feedback']) && $data['other_feedback'];
+
+      if (!$other_feedback && !$expectations && !$relevance) {
+        $message = '<em>Please provide feedback on at least one item.</em>';
+        $errors = [
+          'all_items' => $message,
         ];
       }
     }
